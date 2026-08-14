@@ -35,8 +35,7 @@ const paletteToggle = document.getElementById("palette-toggle");
 const palettePanel = document.getElementById("palette-panel");
 const paletteItems = document.querySelectorAll(".palette-item");
 
-// convertit un nom de ville en coordonnees gps via l'api de geocodage, plus fiable que la recherche par nom
-// convertit un nom de ville en coordonnees gps via l'api de geocodage, plus fiable que la recherche par nom
+// recherche directe par nom de ville, sans transformation du texte saisi pour ne pas casser les noms composes comme pointe-noire
 async function obtenirMeteo(ville) {
     afficherLoader(true);
     errorMessage.hidden = true;
@@ -44,31 +43,14 @@ async function obtenirMeteo(ville) {
 
     try {
         const villeNettoyee = ville.trim();
-        const urlGeocodage = `https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(villeNettoyee)}&limit=5&appid=${API_KEY}`;
-        const reponseGeocodage = await fetch(urlGeocodage);
-
-        if (!reponseGeocodage.ok) {
-            throw new Error("erreur geocodage");
-        }
-
-        const resultatsGeocodage = await reponseGeocodage.json();
-
-        if (resultatsGeocodage.length === 0) {
-            throw new Error("ville introuvable");
-        }
-
-        // privilegie une correspondance exacte avec la saisie plutot que le premier resultat, souvent un quartier ou une subdivision
-        const correspondanceExacte = resultatsGeocodage.find(resultat => resultat.name.toLowerCase() === villeNettoyee.toLowerCase());
-        const meilleurResultat = correspondanceExacte || resultatsGeocodage[0];
-        const { lat, lon } = meilleurResultat;
 
         const [reponseMeteo, reponsePrevisions] = await Promise.all([
-            fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric&lang=fr`),
-            fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric&lang=fr`)
+            fetch(`https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(villeNettoyee)}&appid=${API_KEY}&units=metric&lang=fr`),
+            fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${encodeURIComponent(villeNettoyee)}&appid=${API_KEY}&units=metric&lang=fr`)
         ]);
 
         if (!reponseMeteo.ok || !reponsePrevisions.ok) {
-            throw new Error("meteo introuvable");
+            throw new Error("ville introuvable");
         }
 
         const data = await reponseMeteo.json();
