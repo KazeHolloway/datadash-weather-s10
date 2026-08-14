@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DataDash ~ Dashboard météo interactif</title>
+    <title>DataDash : dashboard météo interactif</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -12,8 +12,8 @@
         <div class="navbar-content">
             <h1 class="sr-only">DataDash : dashboard météo interactif</h1>
             <div class="logo">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path>
+                <svg viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M5.5 16a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.977A4.5 4.5 0 1113.5 16h-8z"></path>
                 </svg>
                 <span>DataDash</span>
             </div>
@@ -51,6 +51,29 @@
     </header>
 
     <main>
+        <section class="search-section" aria-label="Recherche de ville">
+            <h2 class="sr-only">Recherche de ville</h2>
+            <form id="search-form" class="search-form">
+                <div class="search-input-wrapper">
+                    <input type="text" id="search-input" class="search-input" placeholder="Rechercher une ville (ex: Brazzaville, Paris...)" aria-label="Rechercher une ville" autocomplete="off">
+                    <button type="button" id="clear-search" class="clear-search" hidden aria-label="Effacer la recherche">&times;</button>
+                </div>
+                <button type="submit" class="search-btn" aria-label="Lancer la recherche">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="7"></circle>
+                        <path d="M21 21l-4.35-4.35"></path>
+                    </svg>
+                </button>
+            </form>
+            <div class="quick-cities">
+                <button class="quick-city" data-ville="Brazzaville">Brazzaville</button>
+                <button class="quick-city" data-ville="Paris">Paris</button>
+                <button class="quick-city" data-ville="Dolisie">Dolisie</button>
+                <button class="quick-city" data-ville="Montréal">Montréal</button>
+                <!-- <button class="quick-city" data-ville="Pointe-Noire">Pointe-Noire</button> -->
+            </div>
+        </section>
+
         <section class="dashboard-section" aria-label="Tableau de bord météo">
             <h2 class="sr-only">Tableau de bord météo</h2>
 
@@ -61,20 +84,81 @@
 
             <div id="error-message" class="error-message" hidden></div>
 
-            <div id="weather-card" class="weather-card" hidden>
-                <h3 id="city-name" class="city-name">Recherche en cours</h3>
-                <div class="weather-main">
-                    <span id="weather-icon" class="weather-icon"></span>
-                    <span id="temperature" class="temperature"></span>
-                </div>
-                <p id="description" class="description"></p>
-                <div class="weather-details">
-                    <div class="detail-item">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M12 2s6 7.5 6 12a6 6 0 0 1-12 0c0-4.5 6-12 6-12z"></path>
-                        </svg>
-                        <span>Humidité : <strong id="humidity"></strong></span>
+            <div id="weather-card" class="weather-dashboard" hidden>
+                <div class="card card-principale">
+                    <div class="principale-header">
+                        <div>
+                            <h3 id="city-name" class="city-name">Recherche en cours</h3>
+                            <p id="date-jour" class="date-jour"></p>
+                        </div>
+                        <div id="weather-icon" class="weather-icon-large"></div>
                     </div>
+                    <div class="principale-temp">
+                        <span id="temperature" class="temperature"></span>
+                        <div class="temp-info">
+                            <p id="description" class="description"></p>
+                            <p id="ressenti" class="ressenti"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card card-indicateurs">
+                    <h4 class="card-titre">Indicateurs clés</h4>
+                    <div class="indicateurs-grid">
+                        <div class="indicateur-item">
+                            <span class="indicateur-label">Humidité</span>
+                            <span id="humidity" class="indicateur-valeur"></span>
+                        </div>
+                        <div class="indicateur-item">
+                            <span class="indicateur-label">Vent</span>
+                            <span id="vent" class="indicateur-valeur"></span>
+                        </div>
+                        <div class="indicateur-item">
+                            <span class="indicateur-label">Pression</span>
+                            <span id="pression" class="indicateur-valeur"></span>
+                        </div>
+                        <div class="indicateur-item">
+                            <span class="indicateur-label">Visibilité</span>
+                            <span id="visibilite" class="indicateur-valeur"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card card-cycle">
+                    <h4 class="card-titre">Cycle solaire</h4>
+                    <div class="cycle-item">
+                        <svg class="cycle-icone" viewBox="0 0 24 24" fill="none" stroke="#FFA726" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17 18a5 5 0 0 0-10 0"></path>
+                            <line x1="12" y1="2" x2="12" y2="9"></line>
+                            <line x1="4.22" y1="10.22" x2="5.64" y2="11.64"></line>
+                            <line x1="1" y1="18" x2="3" y2="18"></line>
+                            <line x1="21" y1="18" x2="23" y2="18"></line>
+                            <line x1="18.36" y1="11.64" x2="19.78" y2="10.22"></line>
+                            <line x1="23" y1="22" x2="1" y2="22"></line>
+                            <polyline points="8 6 12 2 16 6"></polyline>
+                        </svg>
+                        <div>
+                            <span class="cycle-label">Lever du soleil</span>
+                            <span id="lever-soleil" class="cycle-valeur"></span>
+                        </div>
+                    </div>
+                    <div class="cycle-item">
+                        <svg class="cycle-icone" viewBox="0 0 24 24" fill="none" stroke="#FF7043" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17 18a5 5 0 0 0-10 0"></path>
+                            <line x1="12" y1="9" x2="12" y2="2"></line>
+                            <line x1="4.22" y1="10.22" x2="5.64" y2="11.64"></line>
+                            <line x1="1" y1="18" x2="3" y2="18"></line>
+                            <line x1="21" y1="18" x2="23" y2="18"></line>
+                            <line x1="18.36" y1="11.64" x2="19.78" y2="10.22"></line>
+                            <line x1="23" y1="22" x2="1" y2="22"></line>
+                            <polyline points="16 5 12 9 8 5"></polyline>
+                        </svg>
+                        <div>
+                            <span class="cycle-label">Coucher du soleil</span>
+                            <span id="coucher-soleil" class="cycle-valeur"></span>
+                        </div>
+                    </div>
+                    <p id="maj-heure" class="maj-heure"></p>
                 </div>
             </div>
         </section>
