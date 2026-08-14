@@ -65,12 +65,18 @@
                     </svg>
                 </button>
             </form>
+
+            <div id="historique-section" class="historique-section" hidden>
+                <span class="historique-label">Récents :</span>
+                <div id="historique-liste" class="historique-liste"></div>
+            </div>
+
             <div class="quick-cities">
                 <button class="quick-city" data-ville="Brazzaville">Brazzaville</button>
                 <button class="quick-city" data-ville="Paris">Paris</button>
                 <button class="quick-city" data-ville="Dolisie">Dolisie</button>
+                <button class="quick-city" data-ville="Pointe-Noire">Pointe-Noire</button>
                 <button class="quick-city" data-ville="Montréal">Montréal</button>
-                <!-- <button class="quick-city" data-ville="Pointe-Noire">Pointe-Noire</button> -->
             </div>
         </section>
 
@@ -159,6 +165,11 @@
                         </div>
                     </div>
                     <p id="maj-heure" class="maj-heure"></p>
+                </div>
+
+                <div class="card card-previsions">
+                    <h4 class="card-titre">Prévisions sur 5 jours</h4>
+                    <div id="previsions-liste" class="previsions-liste"></div>
                 </div>
             </div>
         </section>
