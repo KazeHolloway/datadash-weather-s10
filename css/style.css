@@ -188,7 +188,6 @@ body {
     color: var(--accent);
 }
 
-/* logo agrandi suite au retour de kaze, restait trop petit avant */
 .logo svg {
     width: 36px;
     height: 36px;
@@ -396,6 +395,43 @@ main {
     height: 20px;
 }
 
+/* ligne des villes recemment recherchees, alimentee dynamiquement en localstorage */
+.historique-section {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.6rem;
+}
+
+.historique-label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.historique-liste {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.historique-tag {
+    padding: 0.4rem 0.9rem;
+    border-radius: 20px;
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-secondary);
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: all 0.2s ease;
+}
+
+.historique-tag:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent);
+    color: var(--text-color);
+}
+
 .quick-cities {
     display: flex;
     flex-wrap: wrap;
@@ -462,10 +498,11 @@ main {
     text-align: center;
 }
 
+/* 3e ligne ajoutee au grid pour accueillir la carte previsions sur toute la largeur */
 .weather-dashboard {
     display: grid;
     grid-template-columns: 1.3fr 1fr;
-    grid-template-rows: auto auto;
+    grid-template-rows: auto auto auto;
     gap: 1.5rem;
     width: 100%;
     max-width: 1000px;
@@ -518,7 +555,6 @@ main {
     margin-top: 0.3rem;
 }
 
-/* zone dediee a l'icone meteo principale, taille fixe pour accueillir les compositions solo ou combo */
 .weather-icon-large {
     position: relative;
     width: 90px;
@@ -549,7 +585,6 @@ main {
     z-index: 1;
 }
 
-/* astre discret : seul un bout depasse derriere le nuage, pour signaler jour ou nuit meme par ciel couvert */
 .combo-astre-discret {
     top: 2px;
     right: -4px;
@@ -670,7 +705,56 @@ main {
     margin-top: 0.3rem;
 }
 
-/* animations des pieces d'icones svg composant le rendu meteo principal */
+/* carte previsions sur toute la largeur, en 3e ligne du grid */
+.card-previsions {
+    grid-column: 1 / 3;
+    grid-row: 3;
+}
+
+.previsions-liste {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+}
+
+.prevision-jour {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 1;
+    min-width: 90px;
+    background-color: var(--bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    padding: 1.1rem 0.6rem;
+    transition: transform 0.2s ease;
+}
+
+.prevision-jour:hover {
+    transform: translateY(-4px);
+}
+
+.prevision-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.weather-icon-small {
+    position: relative;
+    width: 44px;
+    height: 44px;
+}
+
+.prevision-temp {
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+/* animations des pieces d'icones svg composant le rendu meteo */
 @keyframes tourner-soleil {
     to { transform: rotate(360deg); }
 }
@@ -778,7 +862,7 @@ main {
         grid-template-rows: auto;
     }
 
-    .card-principale, .card-indicateurs, .card-cycle {
+    .card-principale, .card-indicateurs, .card-cycle, .card-previsions {
         grid-column: 1;
         grid-row: auto;
     }
@@ -795,6 +879,15 @@ main {
         width: 70px;
         height: 70px;
     }
+
+    .previsions-liste {
+        justify-content: center;
+    }
+
+    .prevision-jour {
+        min-width: 70px;
+        flex: 0 1 calc(33% - 0.6rem);
+    }
 }
 
 @media (max-width: 480px) {
@@ -809,5 +902,9 @@ main {
 
     .indicateurs-grid {
         grid-template-columns: 1fr;
+    }
+
+    .prevision-jour {
+        flex: 0 1 calc(50% - 0.5rem);
     }
 }
