@@ -9,7 +9,7 @@ Dashboard météo interactif affichant la météo en temps réel d'une ville, av
 - API utilisée : [OpenWeatherMap API](https://openweathermap.org/api)
 
 ## Structure du projet
-\`\`\`bash
+```bash
 datadash-weather-s10/
 ├── index.html
 ├── css/
@@ -17,7 +17,7 @@ datadash-weather-s10/
 ├── js/
 │   └── script.js
 └── README.md
-\`\`\`
+```
 
 ## Auteur
 MASSAMBA BOUESSO Christophe Darly
