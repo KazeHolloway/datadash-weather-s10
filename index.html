@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="fr" data-mode="dark" data-palette="ruby">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataDash : dashboard météo interactif</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="navbar-content">
+            <h1 class="sr-only">DataDash : dashboard météo interactif</h1>
+            <div class="logo">
+                <svg viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M5.5 16a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.977A4.5 4.5 0 1113.5 16h-8z"></path>
+                </svg>
+                <span>DataDash</span>
+            </div>
+
+            <div class="theme-controls">
+                <button id="mode-toggle" class="mode-toggle" aria-label="Changer de mode clair ou sombre">
+                    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>
+                    </svg>
+                    <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </button>
+
+                <button id="palette-toggle" class="palette-toggle" aria-label="Ouvrir la sélection de palette" aria-expanded="false" aria-controls="palette-panel">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M15 18l-6-6 6-6"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <aside id="palette-panel" class="palette-panel" aria-hidden="true">
+            <h2 class="palette-panel-title">Sélection de palette de couleurs</h2>
+            <ul class="palette-list">
+                <li><button class="palette-item" data-palette="ruby"><span class="palette-dot" data-palette="ruby"></span>Rubis</button></li>
+                <li><button class="palette-item" data-palette="sapphire"><span class="palette-dot" data-palette="sapphire"></span>Saphir</button></li>
+                <li><button class="palette-item" data-palette="emerald"><span class="palette-dot" data-palette="emerald"></span>Émeraude</button></li>
+                <li><button class="palette-item" data-palette="gold"><span class="palette-dot" data-palette="gold"></span>Or</button></li>
+                <li><button class="palette-item" data-palette="silver"><span class="palette-dot" data-palette="silver"></span>Argent</button></li>
+                <li><button class="palette-item" data-palette="crystal"><span class="palette-dot" data-palette="crystal"></span>Cristal</button></li>
+            </ul>
+        </aside>
+    </header>
+
+    <main>
+        <section class="search-section" aria-label="Recherche de ville">
+            <h2 class="sr-only">Recherche de ville</h2>
+            <form id="search-form" class="search-form">
+                <div class="search-input-wrapper">
+                    <input type="text" id="search-input" class="search-input" placeholder="Rechercher une ville (ex: Brazzaville, Paris...)" aria-label="Rechercher une ville" autocomplete="off">
+                    <button type="button" id="clear-search" class="clear-search" hidden aria-label="Effacer la recherche">&times;</button>
+                </div>
+                <button type="submit" class="search-btn" aria-label="Lancer la recherche">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="7"></circle>
+                        <path d="M21 21l-4.35-4.35"></path>
+                    </svg>
+                </button>
+            </form>
+
+            <div id="historique-section" class="historique-section" hidden>
+                <span class="historique-label">Récents :</span>
+                <div id="historique-liste" class="historique-liste"></div>
+            </div>
+
+            <div class="quick-cities">
+                <button class="quick-city" data-ville="Brazzaville">Brazzaville</button>
+                <button class="quick-city" data-ville="Paris">Paris</button>
+                <button class="quick-city" data-ville="Dolisie">Dolisie</button>
+                <button class="quick-city" data-ville="Pointe-Noire">Pointe-Noire</button>
+                <button class="quick-city" data-ville="Montréal">Montréal</button>
+            </div>
+        </section>
+
+        <section class="dashboard-section" aria-label="Tableau de bord météo">
+            <h2 class="sr-only">Tableau de bord météo</h2>
+
+            <div id="loader" class="loader" hidden>
+                <div class="spinner"></div>
+                <p>Chargement de la météo...</p>
+            </div>
+
+            <div id="error-message" class="error-message" hidden></div>
+
+            <div id="weather-card" class="weather-dashboard" hidden>
+                <div class="card card-principale">
+                    <div class="principale-header">
+                        <div>
+                            <h3 id="city-name" class="city-name">Recherche en cours</h3>
+                            <p id="date-jour" class="date-jour"></p>
+                        </div>
+                        <div id="weather-icon" class="weather-icon-large"></div>
+                    </div>
+                    <div class="principale-temp">
+                        <span id="temperature" class="temperature"></span>
+                        <div class="temp-info">
+                            <p id="description" class="description"></p>
+                            <p id="ressenti" class="ressenti"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card card-indicateurs">
+                    <h4 class="card-titre">Indicateurs clés</h4>
+                    <div class="indicateurs-grid">
+                        <div class="indicateur-item">
+                            <span class="indicateur-label">Humidité</span>
+                            <span id="humidity" class="indicateur-valeur"></span>
+                        </div>
+                        <div class="indicateur-item">
+                            <span class="indicateur-label">Vent</span>
+                            <span id="vent" class="indicateur-valeur"></span>
+                        </div>
+                        <div class="indicateur-item">
+                            <span class="indicateur-label">Pression</span>
+                            <span id="pression" class="indicateur-valeur"></span>
+                        </div>
+                        <div class="indicateur-item">
+                            <span class="indicateur-label">Visibilité</span>
+                            <span id="visibilite" class="indicateur-valeur"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card card-cycle">
+                    <h4 class="card-titre">Cycle solaire</h4>
+                    <div class="cycle-item">
+                        <svg class="cycle-icone" viewBox="0 0 24 24" fill="none" stroke="#FFA726" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17 18a5 5 0 0 0-10 0"></path>
+                            <line x1="12" y1="2" x2="12" y2="9"></line>
+                            <line x1="4.22" y1="10.22" x2="5.64" y2="11.64"></line>
+                            <line x1="1" y1="18" x2="3" y2="18"></line>
+                            <line x1="21" y1="18" x2="23" y2="18"></line>
+                            <line x1="18.36" y1="11.64" x2="19.78" y2="10.22"></line>
+                            <line x1="23" y1="22" x2="1" y2="22"></line>
+                            <polyline points="8 6 12 2 16 6"></polyline>
+                        </svg>
+                        <div>
+                            <span class="cycle-label">Lever du soleil</span>
+                            <span id="lever-soleil" class="cycle-valeur"></span>
+                        </div>
+                    </div>
+                    <div class="cycle-item">
+                        <svg class="cycle-icone" viewBox="0 0 24 24" fill="none" stroke="#FF7043" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17 18a5 5 0 0 0-10 0"></path>
+                            <line x1="12" y1="9" x2="12" y2="2"></line>
+                            <line x1="4.22" y1="10.22" x2="5.64" y2="11.64"></line>
+                            <line x1="1" y1="18" x2="3" y2="18"></line>
+                            <line x1="21" y1="18" x2="23" y2="18"></line>
+                            <line x1="18.36" y1="11.64" x2="19.78" y2="10.22"></line>
+                            <line x1="23" y1="22" x2="1" y2="22"></line>
+                            <polyline points="16 5 12 9 8 5"></polyline>
+                        </svg>
+                        <div>
+                            <span class="cycle-label">Coucher du soleil</span>
+                            <span id="coucher-soleil" class="cycle-valeur"></span>
+                        </div>
+                    </div>
+                    <p id="maj-heure" class="maj-heure"></p>
+                </div>
+
+                <div class="card card-previsions">
+                    <h4 class="card-titre">Prévisions sur 5 jours</h4>
+                    <div id="previsions-liste" class="previsions-liste"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <button id="scroll-top" class="scroll-top" hidden aria-label="Remonter en haut">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 15l-6-6-6 6"></path>
+        </svg>
+    </button>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
