@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="fr" data-mode="dark" data-palette="ruby">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataDash ~ Dashboard météo interactif</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="navbar-content">
+            <h1 class="sr-only">DataDash : dashboard météo interactif</h1>
+            <div class="logo">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path>
+                </svg>
+                <span>DataDash</span>
+            </div>
+
+            <div class="theme-controls">
+                <button id="mode-toggle" class="mode-toggle" aria-label="Changer de mode clair ou sombre">
+                    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>
+                    </svg>
+                    <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </button>
+
+                <button id="palette-toggle" class="palette-toggle" aria-label="Ouvrir la sélection de palette" aria-expanded="false" aria-controls="palette-panel">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M15 18l-6-6 6-6"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <aside id="palette-panel" class="palette-panel" aria-hidden="true">
+            <h2 class="palette-panel-title">Sélection de palette de couleurs</h2>
+            <ul class="palette-list">
+                <li><button class="palette-item" data-palette="ruby"><span class="palette-dot" data-palette="ruby"></span>Rubis</button></li>
+                <li><button class="palette-item" data-palette="sapphire"><span class="palette-dot" data-palette="sapphire"></span>Saphir</button></li>
+                <li><button class="palette-item" data-palette="emerald"><span class="palette-dot" data-palette="emerald"></span>Émeraude</button></li>
+                <li><button class="palette-item" data-palette="gold"><span class="palette-dot" data-palette="gold"></span>Or</button></li>
+                <li><button class="palette-item" data-palette="silver"><span class="palette-dot" data-palette="silver"></span>Argent</button></li>
+                <li><button class="palette-item" data-palette="crystal"><span class="palette-dot" data-palette="crystal"></span>Cristal</button></li>
+            </ul>
+        </aside>
+    </header>
+
+    <main>
+        <section class="dashboard-section" aria-label="Tableau de bord météo">
+            <h2 class="sr-only">Tableau de bord météo</h2>
+
+            <div id="loader" class="loader" hidden>
+                <div class="spinner"></div>
+                <p>Chargement de la météo...</p>
+            </div>
+
+            <div id="error-message" class="error-message" hidden></div>
+
+            <div id="weather-card" class="weather-card" hidden>
+                <h3 id="city-name" class="city-name">Recherche en cours</h3>
+                <div class="weather-main">
+                    <span id="weather-icon" class="weather-icon"></span>
+                    <span id="temperature" class="temperature"></span>
+                </div>
+                <p id="description" class="description"></p>
+                <div class="weather-details">
+                    <div class="detail-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2s6 7.5 6 12a6 6 0 0 1-12 0c0-4.5 6-12 6-12z"></path>
+                        </svg>
+                        <span>Humidité : <strong id="humidity"></strong></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <button id="scroll-top" class="scroll-top" hidden aria-label="Remonter en haut">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 15l-6-6-6 6"></path>
+        </svg>
+    </button>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
